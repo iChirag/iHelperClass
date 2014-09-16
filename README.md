@@ -9,10 +9,16 @@ Developer can use this class to upload any file type of objects(NSData) like ima
 Developer can use this class to upload any file as well as passed string data Parallel.
 
 Just implemenet this class delegate method in your controlloer,you will get it response in whatever format. This iHelperClass can fetch JSON, XML or HTML (as string in case of any error occured on server side)
+
 It allow to call following type of webservice :
+
 1) Passed text data to server using GET/POST request 
+
 2) Passed JSON data to server 
+
 3) Passed text as well as FIle (image,video,pdf,doc,xls etc) to server.
+
+
 
 How it works?
 ============
