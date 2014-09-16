@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  iHelperClass
 //
-//  Created by iChirag on 16/09/14.
+//  Created by Chirag Lukhi on 16/09/14.
 //  Copyright (c) 2014 iChirag. All rights reserved.
 //
 
