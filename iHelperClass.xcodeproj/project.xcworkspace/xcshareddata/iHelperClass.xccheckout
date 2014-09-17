@@ -10,14 +10,14 @@
 	<string>iHelperClass</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>917A4B5D359D2218DE46521EFA69E9D102E2E6D5</key>
+		<key>F5476AE940F24C19E01DB44A47C8F8F6C5FCCE88</key>
 		<string>https://github.com/iChirag/iHelperClassProject.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>iHelperClass.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>917A4B5D359D2218DE46521EFA69E9D102E2E6D5</key>
+		<key>F5476AE940F24C19E01DB44A47C8F8F6C5FCCE88</key>
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
@@ -25,14 +25,14 @@
 	<key>IDESourceControlProjectVersion</key>
 	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>917A4B5D359D2218DE46521EFA69E9D102E2E6D5</string>
+	<string>F5476AE940F24C19E01DB44A47C8F8F6C5FCCE88</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>917A4B5D359D2218DE46521EFA69E9D102E2E6D5</string>
+			<string>F5476AE940F24C19E01DB44A47C8F8F6C5FCCE88</string>
 			<key>IDESourceControlWCCName</key>
 			<string>iHelperClass</string>
 		</dict>
