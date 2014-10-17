@@ -31,3 +31,7 @@ Then refer ViewController.swift page,it will redirect you to call webservice.
 Follow the four buttons clicked methods on ViewController.swift page.
 
 
+Credits
+==============
+
+[iChirag](https://www.linkedin.com/pub/chirag-lukhi/19/b16/96)  is the developer of this Class/Library.
