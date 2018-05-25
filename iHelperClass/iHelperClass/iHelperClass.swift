@@ -39,118 +39,112 @@ import Foundation
     func iHelperResponseSuccess(ihelper:iHelperClass)
     
     /// This is for Fail request or server give any error
-    optional func iHelperResponseFail(connection: NSURLConnection?,error: NSError)
+    @objc optional func iHelperResponseFail(error: NSError)
 }
 
 public class iHelperClass: NSObject,NSURLConnectionDelegate
 {
     
     public enum MethodType : Int{
-        case GET = 1
-        case POST = 2
-        case JSON = 3
-        case IMAGE = 4
+        case GET  =  1
+        case POST  =  2
+        case JSON  =  3
+        case IMAGE  =  4
     }
     
     
-    let timeinterval:Int = 239
+    let timeinterval:Int  =  239
     private var objConnection:NSURLConnection?
-    private var objURL:NSString!
+    private var objURL:String  =  ""
     private var objParameter:NSMutableDictionary?
     private var objUtility:iHelperUtility!
     public  var responseData:NSData!
     var delegate:iHelperClassDelegate?
-    public var ApiIdentifier:NSString!=""
+    public var apiIdentifier:String  =  ""
     
     
     
     override init()
     {
         super.init();
-        objUtility=iHelperUtility()
+        objUtility = iHelperUtility()
     }
     
     // MARK: Method Web API
     
     /// Call GET request webservice (urlMethodOrFile, parameters:,apiIdentifier,delegate)
-    func iHelperAPI_GET(urlMethodOrFile:NSString, parameters:NSMutableDictionary?,apiIdentifier:NSString,delegate:iHelperClassDelegate!)
-    {
-        self.objParameter=parameters
-        self.ApiIdentifier=apiIdentifier
-        self.delegate=delegate
+    func iHelperAPI_GET(urlMethodOrFile:String, parameters:NSMutableDictionary?, apiIdentifier:String, delegate:iHelperClassDelegate!) {
+        self.objParameter = parameters
+        self.apiIdentifier = apiIdentifier
+        self.delegate = delegate
         
-        var strParam :NSString? = objUtility!.generateParam(objParameter)
-        
-        if (strParam != "")
-        {
-          strParam = "?" + strParam!
+        var strParam :String?  =  objUtility!.generateParam(dicParam: objParameter)!
+        if (strParam !=  "") {
+          strParam  =  "?" + strParam!
         }
         
-        var strURL:String = "\(urlMethodOrFile)" + strParam!
-        self.objURL=strURL
-        
-        self.CallURL(nil, methodtype: MethodType.GET)
-        
+        objURL  =  String(format:"\(urlMethodOrFile)\(strParam!)")
+        self.CallURL(dataParam: nil, methodtype: MethodType.GET)
     }
     
     /// Call POST request webservice (urlMethodOrFile, parameters,apiIdentifier,delegate)
-    func iHelperAPI_POST(urlMethodOrFile:NSString, parameters:NSMutableDictionary?,apiIdentifier:NSString,delegate:iHelperClassDelegate!)
+    func iHelperAPI_POST(urlMethodOrFile:String, parameters:NSMutableDictionary?,apiIdentifier:String,delegate:iHelperClassDelegate!)
     {
-        self.objParameter=parameters
-        self.ApiIdentifier=apiIdentifier
-        self.delegate=delegate
+        self.objParameter = parameters
+        self.apiIdentifier = apiIdentifier
+        self.delegate = delegate
         
-        var strParam :NSString? = objUtility!.generateParam(objParameter!)
-        var strURL:String = (urlMethodOrFile)
-        self.objURL=strURL
+        let strParam :String?  =  objUtility!.generateParam(dicParam: objParameter!)
+        let strURL:String  =  (urlMethodOrFile)
+        objURL = strURL
         
-        self.CallURL(strParam?.dataUsingEncoding(NSUTF8StringEncoding), methodtype: MethodType.POST);
+        self.CallURL(dataParam: strParam?.data(using: String.Encoding.utf8)! as NSData?, methodtype: MethodType.POST);
     }
     
     /// Upload file and text data through webservice (urlMethodOrFile, parameters,parametersImage(dictionary of NSData),apiIdentifier,delegate)
-    func iHelperAPI_FileUpload(urlMethodOrFile:NSString, parameters:NSMutableDictionary?,parametersImage:NSMutableDictionary?,apiIdentifier:NSString,delegate:iHelperClassDelegate!)
+    func iHelperAPI_FileUpload(urlMethodOrFile:String, parameters:NSMutableDictionary?,parametersImage:NSMutableDictionary?,apiIdentifier:String,delegate:iHelperClassDelegate!)
     {
-        self.objParameter=parameters
-        self.ApiIdentifier=apiIdentifier
-        self.delegate=delegate
+        self.objParameter = parameters
+        self.apiIdentifier = apiIdentifier
+        self.delegate = delegate
         
         
-        var strParam :NSString? = objUtility!.generateParam(self.objParameter!)
-        var strURL:String = (urlMethodOrFile)
-        self.objURL=strURL
+        var _ :String?  =  objUtility!.generateParam(dicParam: self.objParameter!)
+        let strURL:String  =  (urlMethodOrFile)
+        objURL = strURL
         
-        var body : NSMutableData?=NSMutableData()
-        
-        
-        var dicParam:NSDictionary = parameters!
-        var dicImageParam:NSDictionary = parametersImage!
+        let body : NSMutableData? = NSMutableData()
         
         
-        var boundary:NSString? = "---------------------------14737809831466499882746641449"
+        let dicParam:NSDictionary  =  parameters!
+        let dicImageParam:NSDictionary  =  parametersImage!
+        
+        
+        let boundary:String?  =  "---------------------------14737809831466499882746641449"
 
         // process text parameters
         for (key, value) in dicParam {
-            body?.appendData(("\r\n--\(boundary)\r\n" as NSString).dataUsingEncoding(NSUTF8StringEncoding)!);
-            body?.appendData(("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n\(value)" as NSString).dataUsingEncoding(NSUTF8StringEncoding)!);
-            body?.appendData(("\r\n--\(boundary)\r\n" as NSString).dataUsingEncoding(NSUTF8StringEncoding)!);
+            body?.append(("\r\n--\(String(describing: boundary))\r\n" as String).data(using: String.Encoding.utf8)!);
+            body?.append(("Content-Disposition: form-data; name = \"\(key)\"\r\n\r\n\(value)" as String).data(using: String.Encoding.utf8)!);
+            body?.append(("\r\n--\(String(describing: boundary))\r\n" as String).data(using: String.Encoding.utf8)!);
         }
 
         
         //process images parameters
-        var i:Int=0
+        let i:Int = 0
         for (key, value) in dicImageParam {
-            body?.appendData(("\r\n--\(boundary)\r\n" as NSString).dataUsingEncoding(NSUTF8StringEncoding)!);
-            body?.appendData(("Content-Disposition: file; name=\"\(key)\"; filename=\"image.png\(i)\"\r\n" as NSString).dataUsingEncoding(NSUTF8StringEncoding)!);
-            body?.appendData(("Content-Type: application/octet-stream\r\n\r\n" as NSString).dataUsingEncoding(NSUTF8StringEncoding)!);
-            body?.appendData(value as NSData);
-            body?.appendData(("\r\n--\(boundary)\r\n" as NSString).dataUsingEncoding(NSUTF8StringEncoding)!);
+            body?.append(("\r\n--\(String(describing: boundary))\r\n" as String).data(using: String.Encoding(rawValue: String.Encoding.utf8.rawValue))!);
+            body?.append(("Content-Disposition: file; name = \"\(key)\"; filename = \"image.png\(i)\"\r\n" as String).data(using: String.Encoding(rawValue: String.Encoding.utf8.rawValue))!);
+            body?.append(("Content-Type: application/octet-stream\r\n\r\n" as String).data(using: String.Encoding(rawValue: String.Encoding.utf8.rawValue))!);
+            body?.append((value as! NSData) as Data);
+            body?.append(("\r\n--\(String(describing: boundary))\r\n" as String).data(using: String.Encoding(rawValue: String.Encoding.utf8.rawValue))!);
         }
 
         
-        body?.appendData(("\r\n--\(boundary)\r\n" as NSString).dataUsingEncoding(NSUTF8StringEncoding)!);
+        body?.append(("\r\n--\(String(describing: boundary))\r\n" as String).data(using: String.Encoding(rawValue: String.Encoding.utf8.rawValue))!);
         
         
-        self.CallURL(body!, methodtype: MethodType.IMAGE);
+        self.CallURL(dataParam: body!, methodtype: MethodType.IMAGE);
         
     }
     
@@ -158,105 +152,134 @@ public class iHelperClass: NSObject,NSURLConnectionDelegate
     
     
     /// Call JSON webservice (urlMethodOrFile,json,apiIdentifier,delegate)
-    func iHelperAPI_JSON(urlMethodOrFile:NSString, json:NSString?,apiIdentifier:NSString,delegate:iHelperClassDelegate!)
+    func iHelperAPI_JSON(urlMethodOrFile:String, json:String?,apiIdentifier:String,delegate:iHelperClassDelegate!)
     {
-        self.ApiIdentifier=apiIdentifier
-        self.delegate=delegate
+        self.apiIdentifier = apiIdentifier
+        self.delegate = delegate
         
-        var strParam :NSString? = json
-        var strURL:String = urlMethodOrFile
-        self.objURL=strURL
+        let strParam :String?  =  json
+        let strURL:String  =  urlMethodOrFile as String
+        objURL = strURL as String
         
-        self.CallURL(strParam?.dataUsingEncoding(NSUTF8StringEncoding),methodtype: MethodType.JSON)
+        self.CallURL(dataParam: strParam?.data(using: String.Encoding.utf8)! as NSData?, methodtype: MethodType.JSON)
         
     }
 
-    private func CallURL(dataParam:NSData?,methodtype:MethodType)
+    private func CallURL(dataParam:NSData?, methodtype:MethodType)
     {
-        println(self.objURL)
+        print(objURL)
         
         if(!self.objUtility.isInternetAvailable())
         {
-            println("INTERNET NOT AVAILABLE")
-            var error :NSError=NSError(domain: "INTERNET NOT AVAILABLE", code: 404, userInfo: nil)
-            delegate?.iHelperResponseFail?(nil, error: error)
+            print("INTERNET NOT AVAILABLE")
+            let error :NSError = NSError(domain: "INTERNET NOT AVAILABLE", code: 404, userInfo: nil)
+            delegate?.iHelperResponseFail?(error: error)
             
             return;
         }
         
-        var objurl = NSURL.URLWithString(self.objURL)
-        var request:NSMutableURLRequest = NSMutableURLRequest(URL:objurl)
+        let url  =  URL(string: objURL) // NSURL(string: objURL as String)
+        var request: URLRequest  =  URLRequest(url:url! as URL)
         
        
-        if(methodtype == MethodType.GET)
+        if(methodtype  ==  MethodType.GET)
         {//if simple GET method -- here we are not using strParam as it concenate with url already
             
-            request.timeoutInterval = NSTimeInterval(self.timeinterval)
-            request.HTTPMethod = "GET";
+            request.timeoutInterval  =  TimeInterval(self.timeinterval)
+            request.httpMethod  =  "GET";
         }
         
-        if(methodtype == MethodType.POST)
+        if(methodtype  ==  MethodType.POST)
         {//if simple POST method
             
 //            request.addValue("\(strParam?.length)", forHTTPHeaderField: "Content-length")
-            request.timeoutInterval = NSTimeInterval(self.timeinterval)
-            request.HTTPMethod = "POST";
-            request.HTTPBody=dataParam
+            request.timeoutInterval  =  TimeInterval(self.timeinterval)
+            request.httpMethod  =  "POST";
+            request.httpBody  =  dataParam! as Data
             
             
         }
       
-        if(methodtype == MethodType.JSON)
+        if(methodtype  ==  MethodType.JSON)
         {//if JSON type webservice called
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             request.addValue("application/json", forHTTPHeaderField: "Accept")
             
 //            request.addValue("\(strParam?.length)", forHTTPHeaderField: "Content-length")
-            request.timeoutInterval = NSTimeInterval(self.timeinterval)
-            request.HTTPMethod = "POST";
-            request.HTTPBody=dataParam
+            request.timeoutInterval  =  TimeInterval(self.timeinterval)
+            request.httpMethod  =  "POST";
+            request.httpBody = dataParam! as Data
         }
         
-        if(methodtype == MethodType.IMAGE)
+        if(methodtype  ==  MethodType.IMAGE)
         {//if webservice with Image Uploading
             
-            var boundary:NSString? = "---------------------------14737809831466499882746641449"
-            var contentType:NSString? = "multipart/form-data; boundary=\(boundary)"
+            let boundary:String?  =  "---------------------------14737809831466499882746641449"
+            let contentType:String?  =  "multipart/form-data; boundary = \(String(describing: boundary))" as String
             
-            request.addValue(contentType, forHTTPHeaderField: "Content-Type")
+            request.addValue(contentType! as String, forHTTPHeaderField: "Content-Type")
             
-            request.timeoutInterval = NSTimeInterval(self.timeinterval)
-            request.HTTPMethod = "POST";
-            request.HTTPBody=dataParam
+            request.timeoutInterval  =  TimeInterval(self.timeinterval)
+            request.httpMethod  =  "POST";
+            request.httpBody = dataParam! as Data
             
         }
         
-        self.objConnection = NSURLConnection(request: request, delegate: self, startImmediately: true)
-        self.responseData=NSData()
+//        self.objConnection  =  NSURLConnection(request: request as URLRequest, delegate: self, startImmediately: true)
+//        self.responseData = NSData()
+        
+        let config = URLSessionConfiguration.default
+        let session = URLSession(configuration: config)
+        
+        // make the request
+        let task = session.dataTask(with: request) {
+            (data, response, error) in
+            // check for any errors
+            guard error == nil else {
+                print("error calling GET on /todos/1")
+                print(error!)
+                self.delegate?.iHelperResponseFail?(error: error! as NSError)
+
+                return
+            }
+            // make sure we got data
+            guard data != nil else {
+                print("Error: did not receive data")
+                return
+            }
+            // parse the result as JSON, since that's what the API provides
+            
+            self.responseData = data! as NSData
+            self.delegate?.iHelperResponseSuccess(ihelper: self)
+            
+        }
+        task.resume()
+        
+       
 
     }
     
     // MARK: NSURLConnection
-    func connection(connection: NSURLConnection, didReceiveResponse response: NSURLResponse)
+    private func connection(connection: NSURLConnection, didReceiveResponse response: URLResponse)
     {
-        println("response")
+        print("response")
     }
     
-    func connection(connection: NSURLConnection, didReceiveData data: NSData)
+    private func connection(connection: NSURLConnection, didReceiveData data: NSData)
     {
-        self.responseData=data
+        self.responseData = data
     }
     func connectionDidFinishLoading(connection: NSURLConnection)
     {
-//        println("json : \(NSString(data: self.responseData!, encoding: NSUTF8StringEncoding))")
-        delegate?.iHelperResponseSuccess(self)
+//        println("json : \(String(data: self.responseData!, encoding: NSUTF8StringEncoding))")
+        delegate?.iHelperResponseSuccess(ihelper: self)
     }
     
-    public func connection(connection: NSURLConnection, didFailWithError error: NSError)
+    public func connection(_ connection: NSURLConnection, didFailWithError error: Error)
     {
-        println("error iHelperClass: \(error)");
+        print("error iHelperClass: \(error)");
         
-        delegate?.iHelperResponseFail?(connection, error: error)
+        delegate?.iHelperResponseFail?(error: error as NSError)
     }
     
     

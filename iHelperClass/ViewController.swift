@@ -23,24 +23,24 @@ class ViewController: UIViewController,iHelperClassDelegate {
     // MARK: All buttons clicked
     @IBAction func btnCallGetws_clicked(sender: AnyObject) {
         
-        var objHelper:iHelperClass=iHelperClass()
+        let objHelper:iHelperClass = iHelperClass()
         
         ///Developer can call directly URL with query string by passing nil to parameters as below :
         
-//        objHelper.iHelperAPI_GET("http://api.geonames.org/citiesJSON?north=44.1&south=-9.9&east=-22.4&west=55.2&lang=de&username=demo", parameters: nil,apiIdentifier: "get_identifier",delegate: self)
+//        objHelper.iHelperAPI_GET("http://api.geonames.org/citiesJSON?north = 44.1&south = -9.9&east = -22.4&west = 55.2&lang = de&username = demo", parameters: nil,apiIdentifier: "get_identifier",delegate: self)
         
         //Developer can call url and parameter separately as well as follow :
         
-        var dicParam:NSMutableDictionary=NSMutableDictionary()
-        dicParam.setObject("44.1", forKey: "north")
-        dicParam.setObject("-9.9", forKey: "south")
-        dicParam.setObject("-22.4", forKey: "east")
-        dicParam.setObject("55.2", forKey: "west")
+        let dicParam:NSMutableDictionary = NSMutableDictionary()
+        dicParam.setObject("44.1", forKey: "north" as NSCopying)
+        dicParam.setObject("-9.9", forKey: "south" as NSCopying)
+        dicParam.setObject("-22.4", forKey: "east" as NSCopying)
+        dicParam.setObject("55.2", forKey: "west" as NSCopying)
         
-        dicParam.setObject("de", forKey: "lang")
-        dicParam.setObject("demo", forKey: "username")
+        dicParam.setObject("de", forKey: "lang" as NSCopying)
+        dicParam.setObject("demo", forKey: "username" as NSCopying)
 
-        objHelper.iHelperAPI_GET("http://api.geonames.org/citiesJSON", parameters: dicParam,apiIdentifier: "get_identifier",delegate: self)
+        objHelper.iHelperAPI_GET(urlMethodOrFile: "http://api.geonames.org/citiesJSON", parameters: dicParam,apiIdentifier: "get_identifier",delegate: self)
         
         
     
@@ -48,53 +48,49 @@ class ViewController: UIViewController,iHelperClassDelegate {
 
     @IBAction func btnCallPOSTws_clicked(sender: AnyObject) {
         
-        var objHelper:iHelperClass=iHelperClass()
+        let objHelper:iHelperClass = iHelperClass()
         
-        var dicParam:NSMutableDictionary=NSMutableDictionary()
-        dicParam.setObject("44.1", forKey: "north")
-        dicParam.setObject("-9.9", forKey: "south")
-        dicParam.setObject("-22.4", forKey: "east")
-        dicParam.setObject("55.2", forKey: "west")
+        let dicParam:NSMutableDictionary = NSMutableDictionary()
+        dicParam.setObject("44.1", forKey: "north" as NSCopying)
+        dicParam.setObject("-9.9", forKey: "south" as NSCopying)
+        dicParam.setObject("-22.4", forKey: "east" as NSCopying)
+        dicParam.setObject("55.2", forKey: "west" as NSCopying)
         
-        dicParam.setObject("de", forKey: "lang")
-        dicParam.setObject("demo", forKey: "username")
+        dicParam.setObject("de", forKey: "lang" as NSCopying)
+        dicParam.setObject("demo", forKey: "username" as NSCopying)
         
-        objHelper.iHelperAPI_POST("http://api.geonames.org/citiesJSON", parameters: dicParam,apiIdentifier: "post_identifier",delegate: self)
+        objHelper.iHelperAPI_POST(urlMethodOrFile: "http://api.geonames.org/citiesJSON", parameters: dicParam,apiIdentifier: "post_identifier",delegate: self)
     
     }
     
     @IBAction func btnImageUploadingws_clicked(sender: AnyObject) {
         
-        var dicParam:NSMutableDictionary=NSMutableDictionary()
-        dicParam.setObject("ichirag", forKey: "firstname")
+        let dicParam:NSMutableDictionary = NSMutableDictionary()
+        dicParam.setObject("ichirag", forKey: "firstname" as NSCopying)
         
-        dicParam.setObject("chirag@chirag.com", forKey: "email")
+        dicParam.setObject("chirag@chirag.com", forKey: "email" as NSCopying)
         
-        dicParam.setObject("chirag123", forKey: "password")
-        dicParam.setObject("ios", forKey: "device_type")
-        dicParam.setObject("JKJKKJKJKJKJKJKJ", forKey: "device_token")
-        dicParam.setObject("1", forKey: "gender")
-        
-        dicParam.setObject("register", forKey: "method")
-        
-        
-        dicParam.setObject("1", forKey: "reg_type")
-        
-        dicParam.setObject("1", forKey: "latitude")
-        dicParam.setObject("1", forKey: "longitude")
-        dicParam.setObject("Asia/Kolkata", forKey: "timezone")
-        dicParam.setObject("Surat", forKey: "location")
+        dicParam.setObject("chirag123", forKey: "password" as NSCopying)
+        dicParam.setObject("ios", forKey: "device_type" as NSCopying)
+        dicParam.setObject("JKJKKJKJKJKJKJKJ", forKey: "device_token" as NSCopying)
+        dicParam.setObject("1", forKey: "gender" as NSCopying)
+        dicParam.setObject("register", forKey: "method" as NSCopying)
+        dicParam.setObject("1", forKey: "reg_type" as NSCopying)
+        dicParam.setObject("1", forKey: "latitude" as NSCopying)
+        dicParam.setObject("1", forKey: "longitude" as NSCopying)
+        dicParam.setObject("Asia/Kolkata", forKey: "timezone" as NSCopying)
+        dicParam.setObject("Surat", forKey: "location" as NSCopying)
         
         
-        var dicImgParam:NSMutableDictionary=NSMutableDictionary()
-        var dataImg=UIImageJPEGRepresentation(UIImage(named:"testing.jpg"), 1)
+        let dicImgParam:NSMutableDictionary = NSMutableDictionary()
+        let dataImg = UIImageJPEGRepresentation(UIImage(named:"testing.jpg")!, 1)
         
-        dicImgParam.setObject(dataImg, forKey: "profilephoto")//you can upload image,video,doc,xls,pdf or anyfile type of objects here as NSData object
+        dicImgParam.setObject(dataImg as Any, forKey: "profilephoto" as NSCopying)//you can upload image,video,doc,xls,pdf or anyfile type of objects here as NSData object
         
-        var objHelper:iHelperClass=iHelperClass()
+        let objHelper:iHelperClass = iHelperClass()
         
         
-        objHelper.iHelperAPI_FileUpload("<ANY URL>/webservice.php", parameters: dicParam, parametersImage: dicImgParam, apiIdentifier: "IMAGE", delegate: self)
+        objHelper.iHelperAPI_FileUpload(urlMethodOrFile: "<ANY URL>/webservice.php", parameters: dicParam, parametersImage: dicImgParam, apiIdentifier: "IMAGE", delegate: self)
         
 
         
@@ -102,56 +98,56 @@ class ViewController: UIViewController,iHelperClassDelegate {
     
     
     @IBAction func btnCallwsAsJSON_clicked(sender: AnyObject) {
-        var objHelper:iHelperClass=iHelperClass()
+        let objHelper:iHelperClass = iHelperClass()
         
 
         
-        var strJSON :NSString="{\"userId\" : \"13645\"}"
+        let strJSON :String = "{\"userId\" : \"13645\"}"
         
         
-        objHelper.iHelperAPI_JSON("<ANY URL>", json: strJSON, apiIdentifier: "JSON", delegate: self)
+        objHelper.iHelperAPI_JSON(urlMethodOrFile: "<ANY URL>", json: strJSON, apiIdentifier: "JSON", delegate: self)
     }
     
     
     // MARK: iHelperClassDelegate
     func iHelperResponseSuccess(ihelper: iHelperClass) {
         
-        if(ihelper.ApiIdentifier=="get_identifier")
+        if(ihelper.apiIdentifier == "get_identifier")
         {
-            var stringJson = NSString(data: ihelper.responseData!, encoding: NSUTF8StringEncoding)
+            let stringJson  =  String(data: ihelper.responseData! as Data, encoding: String.Encoding.utf8)
             
-            println("wenservice GET response >>> \(stringJson)")
+            print("wenservice GET response >>> \(String(describing: stringJson))")
         }
 
-        if(ihelper.ApiIdentifier=="post_identifier")
+        if(ihelper.apiIdentifier == "post_identifier")
         {
-            var stringJson = NSString(data: ihelper.responseData!, encoding: NSUTF8StringEncoding)
+            let stringJson  =  String(data: ihelper.responseData! as Data, encoding: String.Encoding.utf8)
             
-            println("wenservice POST response >>> \(stringJson)")
+            print("wenservice POST response >>> \(String(describing: stringJson))")
         }
 
         
-        if(ihelper.ApiIdentifier=="JSON")
+        if(ihelper.apiIdentifier == "JSON")
         {
-            var stringJson = NSString(data: ihelper.responseData!, encoding: NSUTF8StringEncoding)
+            let stringJson  =  String(data: ihelper.responseData! as Data, encoding: String.Encoding.utf8)
             
-            println("json response >>>> \(stringJson)")
+            print("json response >>>> \(String(describing: stringJson))")
         }
-        if(ihelper.ApiIdentifier=="IMAGE")
+        if(ihelper.apiIdentifier == "IMAGE")
         {
             
-            var stringJson = NSString(data: ihelper.responseData!, encoding: NSUTF8StringEncoding)
+            let stringJson  =  String(data: ihelper.responseData! as Data, encoding: String.Encoding.utf8)
             
-            println("IMAGE response >>>> \(stringJson)")
+            print("IMAGE response >>>> \(String(describing: stringJson))")
         }
     }
     
-    func iHelperResponseFail(connection: NSURLConnection, error: NSError) {
-        println("error : \(error)")
+    func iHelperResponseFail(error: NSError) {
+        print("error : \(error)")
         
-        let alert = UIAlertController(title: "Error", message: "ERROR : \(error)", preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Cancel, handler: nil))
-        self.presentViewController(alert, animated: true, completion: nil)
+        let alert  =  UIAlertController(title: "Error", message: "ERROR : \(error)", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
+        self.present(alert, animated: true, completion: nil)
         
     }
     

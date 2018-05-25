@@ -20,41 +20,43 @@ public class iHelperUtility: NSObject
     
     /// Reachability Method to check Internet available or not
     func isInternetAvailable() -> Bool {
+        var zeroAddress  =  sockaddr_in()
+        zeroAddress.sin_len  =  UInt8(MemoryLayout.size(ofValue: zeroAddress))
+        zeroAddress.sin_family  =  sa_family_t(AF_INET)
         
-        var objAddress = sockaddr_in(sin_len: 0, sin_family: 0, sin_port: 0, sin_addr: in_addr(s_addr: 0), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0))
-        objAddress.sin_len = UInt8(sizeofValue(objAddress))
-        objAddress.sin_family = sa_family_t(AF_INET)
-        
-        let defaultRouteReachability = withUnsafePointer(&objAddress) {
-            SCNetworkReachabilityCreateWithAddress(nil, UnsafePointer($0)).takeRetainedValue()
+        let defaultRouteReachability  =  withUnsafePointer(to: &zeroAddress) {
+            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {zeroSockAddress in
+                SCNetworkReachabilityCreateWithAddress(nil, zeroSockAddress)
+            }
         }
         
-        var flags: SCNetworkReachabilityFlags = 0
-        if SCNetworkReachabilityGetFlags(defaultRouteReachability, &flags) == 0 {
+        var flags  =  SCNetworkReachabilityFlags()
+        if !SCNetworkReachabilityGetFlags(defaultRouteReachability!, &flags) {
             return false
         }
-        
-        let isReachable = (flags & UInt32(kSCNetworkFlagsReachable)) != 0
-        let needsConnection = (flags & UInt32(kSCNetworkFlagsConnectionRequired)) != 0
-        
-        return (isReachable && !needsConnection) ? true : false
+        let isReachable  =  flags.contains(.reachable)
+        let needsConnection  =  flags.contains(.connectionRequired)
+        return (isReachable && !needsConnection)
     }
     
     /// Dictionary to query string conversion
-    public func generateParam(dicParam:NSDictionary?)-> NSString?
+    public func generateParam(dicParam:NSDictionary?)-> String?
     {
         
-        var param:NSString=""
-        if (dicParam==nil || dicParam?.count==0)
+        var param:String  =  ""
+        if (dicParam == nil || dicParam?.count == 0)
         {
             return param
         }
         
         for (key, value) in dicParam! {
-            param = param + "\(key as String)=\(value as String)&"
+            param  =  "\(param)\(key as! String)=\(value as! String)&"
         }
         
-        return param.substringToIndex(param.length-1)
+        return String(param.dropLast())
+        
+//        return param.substring(to: param.count - 1) as String
     }
 
 }
+
