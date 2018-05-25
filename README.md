@@ -1,7 +1,7 @@
 iHelperClass (Pure SWIFT language)
 ===================================
 
-iHelperClass is used to call web-service on SWIFT language on iOS8.
+iHelperClass is used to call web-service on SWIFT language on iOS8 and above.
 
 Developer can use this class to call all types of webservice with GET and POST request.
 Developer can call request as querystring parameter as well as json parameter.
